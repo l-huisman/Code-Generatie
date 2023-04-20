@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: "#3b0764",
+      },
       fontFamily: {
         barlow: ["var(--font-barlow)"],
         mono: ["var(--font-mono)"],
