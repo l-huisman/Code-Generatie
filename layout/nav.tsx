@@ -46,7 +46,7 @@ export default function Nav() {
   return (
     <div
       className={classNames(
-        "w-screen fixed top-0 z-50 transform duration-300 bg-gray-900",
+        "w-screen fixed top-0 z-50 transform duration-300 shadow-lg",
         {
           "translate-y-0": !down,
           "-translate-y-[100%]": down,
@@ -55,15 +55,30 @@ export default function Nav() {
       )}
     >
       <nav className="p-7 px-4 md:px-6 lg:px-8 flex text-white max-w-screen-2xl mx-auto">
-        <h2 className="text-white font-mono font-thin tracking-wider text-lg mr-auto">
-          Code generatie
+        <h2 className="text-white font-poppins font-semibold tracking-wider text-xl mr-auto text-primary">
+          Mr. Banky
         </h2>
-        <ul className="lg:flex items-center gap-x-10 font-mono font-thin tracking-wider uppercase text-gray-200 hidden text-sm">
-          <Link href="#over-mij" scroll={false}>
-            <li className="hover:text-emerald-400 flex">
-              <a>Kaas</a>
-            </li>
-          </Link>
+        <ul className="lg:flex items-center gap-x-10 font-poppins font-medium tracking-wider uppercase text-primary hidden text-sm">
+          <li className="hover:font-bold flex w-18">
+            <Link href="/deposit" scroll={false} className="w-full">
+              Deposit
+            </Link>
+          </li>
+          <li className="hover:font-bold flex w-20">
+            <Link href="/withdraw" scroll={false} className="w-full">
+              Withdraw
+            </Link>
+          </li>
+          <li className="hover:font-bold flex w-20">
+            <Link href="/transfer" scroll={false} className="w-full">
+              Transfer
+            </Link>
+          </li>
+          <li className="hover:text-emerald-400 flex">
+            <Link href="/me" scroll={false} className="w-full">
+              <UserIcon className="h-8 w-8 text-primary" />
+            </Link>
+          </li>
         </ul>
         <button onClick={() => setOpenMobileNav(true)}>
           <Bars3BottomRightIcon className="h-8 w-8 text-gray-200 lg:hidden" />
@@ -84,11 +99,11 @@ export default function Nav() {
             </button>
           </div>
           <ul className="flex flex-col gap-16 mt-20 px-8">
-            <Link href="#over-mij" scroll={false}>
-              <li className="hover:text-emerald-400 flex">
-                <a>Kaas</a>
-              </li>
-            </Link>
+            <li className="hover:text-emerald-400 flex">
+              <Link href="#over-mij" scroll={false} className="w-full">
+                Kaas
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>

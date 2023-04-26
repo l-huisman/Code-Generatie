@@ -13,7 +13,7 @@ module.exports = {
       },
       fontFamily: {
         barlow: ["var(--font-barlow)"],
-        mono: ["var(--font-mono)"],
+        poppins: ["var(--font-poppins)"],
       },
       backgroundImage: {
         stars: 'url("/images/stars.jpg")',

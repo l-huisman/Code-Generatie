@@ -46,7 +46,7 @@ export default function Layout({ children, title, desc, image }: any) {
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <main className="overflow-hidden relative min-h-[100vh] z-0 !bg-fixed !bg-cover">
-        <div className="absolute h-full w-full bg-gray-900 z-1"></div>
+        <div className="absolute h-full w-full bg-gray-100 z-1"></div>
         <header>
           <Nav />
         </header>

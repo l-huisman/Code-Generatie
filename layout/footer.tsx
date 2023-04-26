@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 
 export default function Footer() {

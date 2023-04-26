@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { Barlow, JetBrains_Mono } from "@next/font/google";
+import { Barlow, Poppins } from "@next/font/google";
 import toast, { Toaster } from "react-hot-toast";
 
 const barlow = Barlow({
@@ -9,15 +9,15 @@ const barlow = Barlow({
   variable: "--font-barlow",
 });
 
-const jetBrains_Mono = JetBrains_Mono({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
-  variable: "--font-mono",
+  variable: "--font-poppins",
 });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={`${barlow.variable} ${jetBrains_Mono.variable}`}>
+    <main className={`${barlow.variable} ${poppins.variable}`}>
       <Toaster />
       <Component {...pageProps} />
     </main>
