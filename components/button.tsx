@@ -1,30 +1,9 @@
+import { IButton, variants } from "@/interfaces/Button";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
-
-interface IButton {
-  icon?: JSX.Element;
-  title?: string | JSX.Element;
-  variant: keyof typeof variants;
-  large?: boolean;
-  className?: string;
-  to?: string;
-  download?: boolean | string;
-  disabled?: boolean;
-  onClick?: (e: any) => any;
-}
-
-const variants = {
-  primary: "bg-primary hover:bg-primary/80",
-  gray: "bg-gray-400 hover:bg-gray-400/80",
-  red: "bg-red-600 hover:bg-red-600/80",
-  green: "bg-green-600 hover:bg-green-600/80",
-  blue: "bg-blue-400 hover:bg-blue-400/80",
-  white: "bg-white hover:bg-white/80",
-  transparent: "bg-transparent",
-};
 
 export default function Button({
   icon,

@@ -1,11 +1,10 @@
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import classNames from "classnames";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect } from "react";
+import { IInput } from "@/interfaces/Input";
+import Select from "./select";
 
 export default function Input({
   value,
+  selectValue,
   onChange,
   title,
   name,
@@ -13,21 +12,28 @@ export default function Input({
   icon,
   placeholder,
   className,
+  containerClassName,
+  labelClassName,
+  options,
   ...otherProps
-}: any) {
+}: IInput) {
   return (
     <>
-      <div>
-        <label
-          htmlFor={name}
-          className="mb-2 text-sm font-medium text-gray-900 flex items-center justify-between"
-        >
-          {title}
-          {icon}
-        </label>
-        {type != "textarea" ? (
-          <input
-            type={type}
+      <div className={classNames(containerClassName)}>
+        {(title || icon) && (
+          <label
+            htmlFor={name}
+            className={classNames(
+              "mb-2 text-sm font-medium text-gray-900 flex items-center justify-between",
+              labelClassName
+            )}
+          >
+            {title}
+            {icon}
+          </label>
+        )}
+        {type == "textarea" ? (
+          <textarea
             name={name}
             id={name}
             className={classNames(
@@ -39,8 +45,15 @@ export default function Input({
             onChange={(e) => onChange && onChange(e)}
             {...otherProps}
           />
+        ) : type == "select" ? (
+          <Select
+            value={selectValue}
+            onChange={(e: any) => onChange && onChange(e)}
+            options={options || []}
+          />
         ) : (
-          <textarea
+          <input
+            type={type}
             name={name}
             id={name}
             className={classNames(

@@ -23,7 +23,8 @@
       "@/modals/*": ["components/modals/*"],
       "@/utils/*": ["utils/*"],
       "@/lib/*": ["lib/*"],
-      "@/styles/*": ["styles/*"]
+      "@/styles/*": ["styles/*"],
+      "@/interfaces/*": ["interfaces/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./types"],
