@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import classNames from "classnames";
 import {
   Bars3BottomRightIcon,
@@ -7,6 +7,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
+import { Menu, Transition } from "@headlessui/react";
 
 export default function Nav() {
   const router = useRouter();
@@ -55,9 +56,12 @@ export default function Nav() {
       )}
     >
       <nav className="p-7 px-4 md:px-6 lg:px-8 flex text-white max-w-screen-2xl mx-auto">
-        <h2 className="text-white font-poppins font-semibold tracking-wider text-xl mr-auto text-primary">
-          Mr. Banky
-        </h2>
+        <Link
+          className="font-poppins font-semibold tracking-wider text-xl mr-auto text-primary"
+          href="/"
+        >
+          <h2 className="">Mr. Banky</h2>
+        </Link>
         <ul className="lg:flex items-center gap-x-10 font-poppins font-medium tracking-wider uppercase text-primary hidden text-sm">
           <li className="hover:font-bold flex w-18">
             <Link href="/deposit" scroll={false} className="w-full">
@@ -75,21 +79,83 @@ export default function Nav() {
             </Link>
           </li>
           <li className="hover:text-emerald-400 flex">
-            <Link href="/me" scroll={false} className="w-full">
-              <UserIcon className="h-8 w-8 text-primary" />
-            </Link>
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <Menu.Button className="inline-flex w-full justify-center rounded-md text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                  <UserIcon className="h-6 w-6 text-primary" />
+                </Menu.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          href="/me"
+                          className={`${
+                            active
+                              ? "bg-violet-500 text-white"
+                              : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        >
+                          Me
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  </div>
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          href="/login"
+                          className={`${
+                            active
+                              ? "bg-violet-500 text-white"
+                              : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        >
+                          Login
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          href="/login"
+                          className={`${
+                            active
+                              ? "bg-violet-500 text-white"
+                              : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        >
+                          Logout
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
           </li>
         </ul>
         <button onClick={() => setOpenMobileNav(true)}>
-          <Bars3BottomRightIcon className="h-8 w-8 text-gray-200 lg:hidden" />
+          <Bars3BottomRightIcon className="h-8 w-8 text-gray-600 lg:hidden" />
         </button>
       </nav>
       <div
-        className={`absolute right-0 top-0 h-screen w-80 bg-gray-900 duration-300 z-20 shadow-lg p-7 px-4 md:px-6 ${
+        className={`absolute right-0 top-0 h-screen w-80 bg-primary duration-300 z-20 shadow-lg p-7 px-4 md:px-6 ${
           openMobileNav ? "translate-x-0" : "translate-x-[100%]"
         }`}
       >
-        <nav className="relative h-full flex flex-col text-gray-300 font-mono font-thin">
+        <nav className="relative h-full flex flex-col text-gray-300">
           <div className="flex items-center justify-between">
             <Link href="/admin-login">
               <UserIcon className="h-6 w-6 hover:text-emerald-400" />
@@ -98,10 +164,20 @@ export default function Nav() {
               <XMarkIcon className="h-8 w-8 text-gray-200" />
             </button>
           </div>
-          <ul className="flex flex-col gap-16 mt-20 px-8">
+          <ul className="flex flex-col gap-16 mt-20 px-8 font-poppins">
             <li className="hover:text-emerald-400 flex">
-              <Link href="#over-mij" scroll={false} className="w-full">
-                Kaas
+              <Link href="/deposit" scroll={false} className="w-full">
+                Deposit
+              </Link>
+            </li>
+            <li className="hover:text-emerald-400 flex">
+              <Link href="/withdraw" scroll={false} className="w-full">
+                Withdraw
+              </Link>
+            </li>
+            <li className="hover:text-emerald-400 flex">
+              <Link href="/transfer" scroll={false} className="w-full">
+                Transfer
               </Link>
             </li>
           </ul>

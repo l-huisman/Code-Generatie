@@ -37,7 +37,7 @@ export default function Input({
             name={name}
             id={name}
             className={classNames(
-              "bg-gray-50 border border-gray-300 placeholder:text-gray-900 sm:text-sm rounded-lg block w-full p-2.5",
+              "bg-gray-50 border border-gray-300 placeholder:text-gray-500 sm:text-sm rounded-lg block w-full p-2.5",
               className
             )}
             placeholder={placeholder}
@@ -57,7 +57,7 @@ export default function Input({
             name={name}
             id={name}
             className={classNames(
-              "bg-gray-50 border border-gray-300 placeholder:text-gray-900 sm:text-sm rounded-lg block w-full p-2.5",
+              "bg-gray-50 border border-gray-300 placeholder:text-gray-500 sm:text-sm rounded-lg block w-full p-2.5",
               className
             )}
             placeholder={placeholder}
