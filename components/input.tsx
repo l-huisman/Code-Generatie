@@ -15,6 +15,7 @@ export default function Input({
   containerClassName,
   labelClassName,
   options,
+  maxLength,
   ...otherProps
 }: IInput) {
   return (
@@ -51,6 +52,13 @@ export default function Input({
             onChange={(e: any) => onChange && onChange(e)}
             options={options || []}
           />
+        ) : type == "multiSelect" ? (
+          <Select
+            value={selectValue}
+            onChange={(e: any) => onChange && onChange(e)}
+            options={options || []}
+            multiple={true}
+          />
         ) : (
           <input
             type={type}
@@ -63,6 +71,7 @@ export default function Input({
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange && onChange(e)}
+            maxLength={maxLength || 255}
             {...otherProps}
           />
         )}

@@ -7,8 +7,8 @@ export default withSessionRoute(loginRoute);
 async function loginRoute(req: any, res: any) {
   if (req.method === "POST") {
     try {
-      const customer = await axios.post(`${API_URL}/account/login`, {
-        email: req.body.email,
+      const customer = await axios.post(`${API_URL}/login`, {
+        username: req.body.username,
         password: req.body.password,
       });
 
