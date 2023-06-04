@@ -4,15 +4,20 @@ export interface IButton {
   variant: keyof typeof variants;
   large?: boolean;
   className?: string;
+  titleClassName?: string;
+  containerClassName?: string;
   to?: string;
   download?: boolean | string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  loading?: boolean;
+  keepTitle?: boolean;
   onClick?: (e: any) => any;
 }
 
 export const variants = {
-  primary: "bg-primary hover:bg-primary/80",
+  primary: "bg-primary hover:bg-primary/80 text-white",
+  "border-primary": "border border-primary hover:bg-primary/80 text-primary",
   gray: "bg-gray-400 hover:bg-gray-400/80",
   red: "bg-red-600 hover:bg-red-600/80 text-white",
   green: "bg-green-600 hover:bg-green-600/80",

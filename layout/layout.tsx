@@ -4,8 +4,8 @@ import Link from "next/link";
 import Footer from "./footer";
 import Nav from "./nav";
 
-export const siteTitle = "Devon van Wichen";
-export const siteUrl = "devonvanwichen.nl";
+export const siteTitle = "Mr. Banky";
+export const siteUrl = "mrbanky.nl";
 
 export default function Layout({ children, title, desc, image }: any) {
   return (

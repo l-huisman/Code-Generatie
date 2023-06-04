@@ -5,7 +5,7 @@ const sessionOptions: IronSessionOptions = {
   password:
     process.env.SESSION_PASSWORD ||
     "222222222222222222222222222222222222222222",
-  cookieName: "devonvanwichencookie",
+  cookieName: "mrbankycookie",
 };
 
 export function withSessionRoute(handler: any) {

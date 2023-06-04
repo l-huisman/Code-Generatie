@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { Barlow, Poppins } from "@next/font/google";
 import toast, { Toaster } from "react-hot-toast";
+import { UserProvider } from "@/components/context/UserContext";
 
 const barlow = Barlow({
   subsets: ["latin"],
@@ -17,9 +18,11 @@ const poppins = Poppins({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={`${barlow.variable} ${poppins.variable}`}>
-      <Toaster />
-      <Component {...pageProps} />
-    </main>
+    <UserProvider>
+      <main className={`${barlow.variable} ${poppins.variable}`}>
+        <Toaster />
+        <Component {...pageProps} />
+      </main>
+    </UserProvider>
   );
 }

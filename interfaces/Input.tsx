@@ -9,7 +9,8 @@ export interface IInput {
   labelClassName?: string;
   value?: string;
   selectValue?: object;
-  options?: { id: number; name: string }[];
+  maxLength?: number;
+  options?: { id: number; name: string; meta: any }[];
   onChange?: (e: any) => void;
   [x: string | number | symbol]: unknown;
 }

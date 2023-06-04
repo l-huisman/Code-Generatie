@@ -5,25 +5,29 @@ import { useRouter } from "next/router";
 
 const useAuth = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [signupState, setSignupState] = useState({
+    username: "",
+    password: "",
+    re_Password: "",
+    email: "",
+    first_name: "",
+    last_name: "",
+  });
 
-  const login = useCallback(
-    async (e: any) => {
-      e.preventDefault();
-      try {
-        const { data } = await axios.post(`/api/login`, {
-          email,
-          password,
-        });
+  const login = useCallback(async () => {
+    try {
+      const { data } = await axios.post(`/api/login`, {
+        username,
+        password,
+      });
 
-        router.push("/");
-      } catch (e: any) {
-        toast.error(e?.response?.data);
-      }
-    },
-    [email, password]
-  );
+      router.push("/");
+    } catch (e: any) {
+      toast.error(e?.response?.data);
+    }
+  }, [username, password]);
 
   const logout = useCallback(async () => {
     try {
@@ -35,10 +39,23 @@ const useAuth = () => {
     }
   }, []);
 
+  const signup = useCallback(async () => {
+    try {
+      const { data } = await axios.post(`/backend/signup`, signupState);
+
+      router.push("/login");
+    } catch (e: any) {
+      toast.error(e?.response?.data);
+    }
+  }, [username, password, signupState]);
+
   return {
-    email,
+    username,
     password,
-    setEmail,
+    signupState,
+    setSignupState,
+    signup,
+    setUsername,
     setPassword,
     login,
     logout,
