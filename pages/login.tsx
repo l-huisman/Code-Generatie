@@ -4,18 +4,23 @@ import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import Layout from "@/layout/layout";
 import Section from "@/components/section";
-import { useEffect, useRef } from "react";
+import { use, useContext, useEffect, useRef } from "react";
 import Link from "next/link";
 import Input from "@/components/input";
 import Button from "@/components/button";
 import useAuth from "hooks/useAuth";
+import { UserContext } from "@/components/context/UserContext";
+import useTransaction from "hooks/useTransaction";
 
 export default function Login() {
-  const { login, username, password, setUsername, setPassword } = useAuth();
+  const { setUser } = useContext(UserContext);
+  const { login, username, password, setUsername, setPassword } =
+    useAuth(setUser);
+
   return (
     <>
       <Layout title="Login">
-        <div className="min-h-screen max-w-screen-2xl py-20 mt-20 px-4 h-full flex items-center justify-center">
+        <div className="min-h-screen max-w-screen-2xl mx-auto py-20 mt-20 px-4 h-full flex items-center justify-center">
           <div className="max-w-lg w-full bg-primary rounded-lg p-6">
             <h3 className="text-white font-medium text-2xl font-poppins mb-8">
               Login

@@ -6,7 +6,10 @@ export interface IModal {
   description?: string | JSX.Element;
   closeButtonVariant?: keyof typeof variants;
   className?: string;
+  titleClassName?: string;
   customWidth?: string;
   isOpen: boolean;
+  icon?: JSX.Element;
+  overflowVisible?: boolean;
   setIsOpen: (e: boolean) => void;
 }

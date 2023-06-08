@@ -2,16 +2,14 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { API_URL } from "./constants";
+import { getIronSession } from "iron-session/edge";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const authenticatedPaths =
     path.startsWith("/login") || path.startsWith("/signup");
 
-  // Setup headers
-  const requestHeaders: HeadersInit = new Headers();
-  requestHeaders.set("Cookie", request.headers.get("cookie") || "");
-  requestHeaders.set("withCredentials", "true");
+  const employeeAuthenticatedPaths = path.startsWith("/dashboard");
 
   const sessionID = request.cookies.get("mrbankycookie")?.value;
 
@@ -20,21 +18,39 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.nextUrl));
   else if (sessionID) {
     try {
-      // // Double check if user is logged in
-      // const res = await fetch(`${API_URL}/is-logged-in`, {
-      //   method: "GET",
-      //   headers: requestHeaders,
-      // });
+      const res = NextResponse.next();
+      const session: any = await getIronSession(request, res, {
+        password:
+          process.env.SESSION_PASSWORD ||
+          "222222222222222222222222222222222222222222",
+        cookieName: "mrbankycookie",
+        // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
+      });
 
-      // // User is not logged in and path is not one of the authenticatedPaths, redirect to login
-      // if (res?.status !== 200 && !authenticatedPaths) {
-      //   return NextResponse.redirect(new URL("/login", request.nextUrl));
-      // }
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set("Authorization", `Bearer ${session?.token}`);
+      requestHeaders.set("withCredentials", "true");
 
-      // // User is logged in and path is one of the authenticatedPaths, redirect to home
-      // if (authenticatedPaths) {
-      //   return NextResponse.redirect(new URL("/", request.nextUrl));
-      // }
+      // Double check if user is logged in
+      const resUser = await fetch(`${API_URL}/login/validate`, {
+        method: "GET",
+        headers: requestHeaders,
+      });
+
+      if (resUser.status !== 200 && !authenticatedPaths) {
+        return NextResponse.redirect(new URL("/login", request.nextUrl));
+      }
+
+      const role = await resUser.json();
+
+      if (role != "EMPLOYEE" && employeeAuthenticatedPaths) {
+        return NextResponse.redirect(new URL("/", request.nextUrl));
+      }
+
+      if (role == "EMPLOYEE" && !employeeAuthenticatedPaths) {
+        return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
+      }
+
       if (authenticatedPaths) {
         return NextResponse.redirect(new URL("/", request.nextUrl));
       }

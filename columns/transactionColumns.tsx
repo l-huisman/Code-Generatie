@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 export const transactionColumns = [
   {
     name: "Type",
-    selector: (row: any) => row.transaction_type,
+    selector: (row: any) => row.transactionType,
     sortable: true,
   },
   {
@@ -29,9 +29,9 @@ export const transactionColumns = [
   },
   {
     name: "Created at",
-    selector: (row: any) => row.created_at,
+    selector: (row: any) => row.createdAt,
     format: (row: any, index: number) =>
-      row.created_at ? dayjs(row?.created_at).format("HH:mm DD/MM/YYYY") : "-",
+      row.createdAt ? dayjs(row?.createdAt).format("HH:mm DD/MM/YYYY") : "-",
     sortable: true,
   },
 ];

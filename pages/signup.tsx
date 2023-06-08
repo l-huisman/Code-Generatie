@@ -15,7 +15,7 @@ export default function Signup() {
   return (
     <>
       <Layout title="Login">
-        <div className="min-h-screen max-w-screen-2xl py-20 mt-20 px-4 h-full flex items-center justify-center">
+        <div className="min-h-screen max-w-screen-2xl mx-auto py-20 mt-20 px-4 h-full flex items-center justify-center">
           <div className="max-w-lg w-full bg-primary rounded-lg p-6">
             <h3 className="text-white font-medium text-2xl font-poppins mb-8">
               Signup

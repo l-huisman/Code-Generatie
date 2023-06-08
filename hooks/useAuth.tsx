@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useRouter } from "next/router";
 
-const useAuth = () => {
+const useAuth = (setUser?: any) => {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +23,8 @@ const useAuth = () => {
         password,
       });
 
+      setUser(data);
+
       router.push("/");
     } catch (e: any) {
       toast.error(e?.response?.data);
@@ -32,12 +34,13 @@ const useAuth = () => {
   const logout = useCallback(async () => {
     try {
       const { data } = await axios.post(`/api/logout`);
+      setUser(null);
 
       router.push("/");
     } catch (e: any) {
       toast.error(e?.response?.data);
     }
-  }, []);
+  }, [setUser]);
 
   const signup = useCallback(async () => {
     try {

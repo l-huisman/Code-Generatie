@@ -1,23 +1,30 @@
-import Layout from "@/layout/layout";
-import DataTable from "react-data-table-component";
+import { sidebarItems } from "@/assets/data";
+import Button from "@/components/button";
+import Input from "@/components/input";
+import Spinner from "@/components/spinner";
+import DashboardLayout from "@/layout/dashboardLayout";
 import { withSessionSsr } from "@/lib/withSession";
+import { MagnifyingGlassIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { transactionColumns } from "columns/transactionColumns";
 import useTransaction from "hooks/useTransaction";
-import Input from "@/components/input";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
-export default function Account({ ApiConfig, id }: any) {
+import { useEffect } from "react";
+import DataTable from "react-data-table-component";
+
+export default function Transactions({ ApiConfig }: any) {
   const router = useRouter();
-  const { transactions, filters, setFilters } = useTransaction(ApiConfig, id);
+  const { transactions, filters, loading, setFilters, getTransactions } =
+    useTransaction("all", ApiConfig);
+
   return (
     <>
-      <Layout>
-        <div className="min-h-screen max-w-screen-2xl py-20 mt-20 px-10 h-full">
-          <h1 className="font-bold text-2xl font-poppins">Account 1</h1>
-          <div className="h-0.5 w-60 bg-primary mt-4" />
+      <DashboardLayout title="Transactions">
+        <div className="p-4">
           <div className="grid grid-cols-12 gap-10 mt-10 h-full">
             <div className="col-span-12 shadow-md p-6 h-full">
-              <div className="mb-8 flex items-center justify-start gap-x-4">
+              <div className="mb-8 flex items-end justify-start gap-x-4">
                 <Input
                   type="text"
                   placeholder="Search..."
@@ -47,6 +54,11 @@ export default function Account({ ApiConfig, id }: any) {
                     setFilters({ ...filters, endDate: e.target.value })
                   }
                 />
+                <Button
+                  variant="primary"
+                  icon={<MagnifyingGlassIcon className="h-6 w-6" />}
+                  onClick={() => getTransactions()}
+                />
               </div>
               <DataTable
                 data={transactions}
@@ -56,17 +68,23 @@ export default function Account({ ApiConfig, id }: any) {
                   rowsPerPageText: "Rows per page",
                   rangeSeparatorText: "from",
                 }}
-                noDataComponent={"No transactions."}
+                noDataComponent={
+                  loading ? (
+                    <Spinner className="h-10 w-10" />
+                  ) : (
+                    "No transactions."
+                  )
+                }
                 highlightOnHover
                 pointerOnHover
                 onRowClicked={(row) =>
-                  router.push(`/accounts/${id}/transactions/${row.id}`)
+                  router.push(`/dashboard/transactions/${row.id}`)
                 }
               />
             </div>
           </div>
         </div>
-      </Layout>
+      </DashboardLayout>
     </>
   );
 }
@@ -94,7 +112,6 @@ export const getServerSideProps = withSessionSsr(
 
     return {
       props: {
-        id: params?.id,
         ApiConfig: ApiConfig,
       },
     };

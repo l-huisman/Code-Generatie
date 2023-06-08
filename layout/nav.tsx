@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { Menu, Transition } from "@headlessui/react";
 import { UserContext } from "@/components/context/UserContext";
 import Button from "@/components/button";
+import useAuth from "hooks/useAuth";
 
 export default function Nav() {
   const router = useRouter();
@@ -17,7 +18,8 @@ export default function Nav() {
   const [scrollY, setScrollY] = useState(0);
   const [oldScrollY, setOldScrollY] = useState(0);
   const [down, setDown] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const { logout } = useAuth(setUser);
 
   useEffect(() => {
     setOpenMobileNav(false);
@@ -50,7 +52,7 @@ export default function Nav() {
   return (
     <div
       className={classNames(
-        "w-screen fixed top-0 z-50 transform duration-300 shadow-lg",
+        "w-screen fixed top-0 z-50 transform duration-300 shadow-lg bg-white",
         {
           "translate-y-0": !down,
           "-translate-y-[100%]": down,
@@ -60,13 +62,13 @@ export default function Nav() {
     >
       <nav className="p-7 px-4 md:px-6 lg:px-8 flex text-white max-w-screen-2xl mx-auto relative bg-white z-50">
         <Link
-          className="font-poppins font-semibold tracking-wider text-xl mr-auto text-primary"
+          className="font-poppins font-semibold tracking-wider text-xl mr-auto text-primary my-auto"
           href="/"
         >
           <h2 className="">Mr. Banky</h2>
         </Link>
         <ul className="lg:flex items-center gap-x-10 font-poppins font-medium tracking-wider uppercase text-primary hidden text-sm">
-          {user ? (
+          {user?.userType == "USER" ? (
             <>
               <li className="hover:font-bold flex w-18">
                 <Link href="/deposit" className="w-full">
@@ -122,34 +124,33 @@ export default function Nav() {
                         </Menu.Item>
                       </div>
                       <div className="px-1 py-1">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              href="/login"
-                              className={`${
-                                active
-                                  ? "bg-violet-500 text-white"
-                                  : "text-gray-900"
-                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            >
-                              Login
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              href="/login"
-                              className={`${
-                                active
-                                  ? "bg-violet-500 text-white"
-                                  : "text-gray-900"
-                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            >
-                              Logout
-                            </Link>
-                          )}
-                        </Menu.Item>
+                        {!user ? (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                href="/login"
+                                className={`${
+                                  active
+                                    ? "bg-violet-500 text-white"
+                                    : "text-gray-900"
+                                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                              >
+                                Login
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        ) : (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Button
+                                title="LOGOUT"
+                                variant="white"
+                                onClick={() => logout()}
+                                className={`hover:bg-violet-500 hover:!text-white !text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                              />
+                            )}
+                          </Menu.Item>
+                        )}
                       </div>
                     </Menu.Items>
                   </Transition>
