@@ -8,11 +8,11 @@ import React, {
   use,
 } from "react";
 import dayjs from "dayjs";
-import { accountsData } from "@/assets/data";
+import { accountsData, usersData } from "@/assets/data";
 
-const useAccounts = (ApiConfig: any, id?: number) => {
-  const [accounts, setAccounts] = useState<any>([]);
-  const [account, setAccount] = useState<any>({});
+const useUsers = (ApiConfig: any, id?: number) => {
+  const [users, setUsers] = useState<any>([]);
+  const [user, setUser] = useState<any>({});
   const [state, setState] = useState<any>({});
   const [filters, setFilters] = useState<any>({
     startDate: new Date(new Date().getFullYear(), 0, 1),
@@ -24,50 +24,36 @@ const useAccounts = (ApiConfig: any, id?: number) => {
   const [totalRows, setTotalRows] = useState(0);
   const [perPage, setPerPage] = useState(0);
 
-  const getAccount = useCallback(async () => {
+  const getUser = useCallback(async () => {
     try {
-      const { data } = await axios.get(`/backend/accounts/${id}`);
+      const { data } = await axios.get(`/backend/users/${id}`, ApiConfig);
 
-      setAccount(data);
+      setUser(data);
     } catch (e: any) {
       toast.error(e?.response?.data?.msg);
     }
   }, [id]);
 
-  const getAccounts = useCallback(async () => {
+  const getUsers = useCallback(async () => {
     try {
-      setAccounts(accountsData);
+      setUsers(usersData);
     } catch (e: any) {
       toast.error(e?.response?.data?.msg);
     }
   }, [id]);
-
-  const addTransaction = useCallback(async () => {
-    try {
-      const { data } = await axios.post(
-        `/backend/transactions`,
-        state,
-        ApiConfig
-      );
-
-      toast.success(data?.msg);
-    } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
-    }
-  }, [ApiConfig]);
 
   useEffect(() => {
-    if (id) getAccount();
-    else getAccounts();
+    if (id) getUser();
+    else getUsers();
   }, []);
 
   useEffect(() => {
-    getAccounts();
+    getUsers();
   }, [pageNumber]);
 
   return {
-    account,
-    accounts,
+    user,
+    users,
     state,
     filters,
     pageNumber,
@@ -76,8 +62,7 @@ const useAccounts = (ApiConfig: any, id?: number) => {
     setPageNumber,
     setState,
     setFilters,
-    addTransaction,
   };
 };
 
-export default useAccounts;
+export default useUsers;

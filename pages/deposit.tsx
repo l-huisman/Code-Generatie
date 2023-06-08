@@ -12,11 +12,14 @@ import { withSessionSsr } from "@/lib/withSession";
 import Button from "@/components/button";
 
 export default function Deposit({ ApiConfig }: any) {
-  const { state, addTransaction, setState } = useTransaction(ApiConfig);
+  const { state, addTransaction, setState } = useTransaction(
+    "create",
+    ApiConfig
+  );
   return (
     <>
       <Layout>
-        <div className="min-h-screen max-w-screen-2xl py-20 mt-20 px-10 h-full">
+        <div className="min-h-screen max-w-screen-2xl mx-auto py-20 mt-20 px-10 h-full">
           <h1 className="font-bold text-2xl font-poppins">Deposit</h1>
           <div className="h-0.5 w-60 bg-primary mt-4" />
           <div className="grid grid-cols-12 gap-10 mt-10 h-full">
@@ -25,7 +28,11 @@ export default function Deposit({ ApiConfig }: any) {
                 <Input
                   type="select"
                   options={[
-                    { id: 1, name: "Account 1", meta: { balance: 200 } },
+                    {
+                      id: 1,
+                      name: "Account 1",
+                      meta: { balance: 200, iban: "NL12-MRBA-7175-5284-04" },
+                    },
                   ]}
                   name="account"
                   title="Account"
@@ -67,7 +74,7 @@ export default function Deposit({ ApiConfig }: any) {
                   title="Deposit"
                   variant="primary"
                   className="w-full"
-                  onClick={() => addTransaction()}
+                  onClick={() => addTransaction("DEPOSIT")}
                 />
               </form>
               <div className="">
@@ -77,6 +84,8 @@ export default function Deposit({ ApiConfig }: any) {
                 <div className="h-0.5 w-24 bg-primary mt-2 mb-8" />
                 {state?.toAccount && (
                   <>
+                    <p className="font-medium text-base">IBAN</p>
+                    <p className="text-sm">{state?.toAccount?.meta?.iban}</p>
                     <p className="font-medium text-base">Balance</p>
                     <p className="text-sm">
                       €{state?.toAccount?.meta?.balance}

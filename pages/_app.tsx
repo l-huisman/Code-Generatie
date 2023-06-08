@@ -18,7 +18,7 @@ const poppins = Poppins({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <UserProvider>
+    <UserProvider ApiConfig={pageProps?.ApiConfig}>
       <main className={`${barlow.variable} ${poppins.variable}`}>
         <Toaster />
         <Component {...pageProps} />
