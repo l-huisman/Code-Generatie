@@ -15,3 +15,7 @@ export function withSessionRoute(handler: any) {
 export function withSessionSsr(handler: any) {
   return withIronSessionSsr(handler, sessionOptions);
 }
+
+export function withSessionSsrInitalProps(handler: any) {
+  return withIronSessionSsr(handler, sessionOptions);
+}

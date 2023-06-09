@@ -30,7 +30,7 @@ const useUsers = (ApiConfig: any, id?: number) => {
 
       setUser(data);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
   }, [id]);
 
@@ -38,7 +38,7 @@ const useUsers = (ApiConfig: any, id?: number) => {
     try {
       setUsers(usersData);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
   }, [id]);
 
