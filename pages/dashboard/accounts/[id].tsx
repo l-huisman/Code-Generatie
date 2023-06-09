@@ -53,6 +53,7 @@ export default function Accounts({ ApiConfig, id }: any) {
                   onClick={() => {
                     setModalType("DEPOSIT");
                     setOpenAddModal(true);
+                    setState({ ...state, toAccountIban: id });
                   }}
                 />
                 <Button
@@ -62,6 +63,7 @@ export default function Accounts({ ApiConfig, id }: any) {
                   onClick={() => {
                     setModalType("WITHDRAW");
                     setOpenAddModal(true);
+                    setState({ ...state, fromAccountIban: id });
                   }}
                 />
                 <Button
@@ -71,6 +73,7 @@ export default function Accounts({ ApiConfig, id }: any) {
                   onClick={() => {
                     setModalType("TRANSFER");
                     setOpenAddModal(true);
+                    setState({ ...state, fromAccountIban: id });
                   }}
                 />
               </div>

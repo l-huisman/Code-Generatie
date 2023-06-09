@@ -17,7 +17,7 @@ async function loginRoute(req: any, res: any) {
       await req.session.save();
       res.status(200).send(customer?.data?.user);
     } catch (e: any) {
-      res.status(500).send(e?.response?.data?.msg);
+      res.status(500).send(e?.response?.data?.message);
     }
   }
 }

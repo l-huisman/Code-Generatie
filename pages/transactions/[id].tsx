@@ -7,6 +7,8 @@ import Input from "@/components/input";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import Loading from "@/components/loading";
+import axios from "axios";
+import { API_URL } from "@/constants";
 
 export default function Transaction({ ApiConfig, id }: any) {
   const router = useRouter();
@@ -65,30 +67,33 @@ export default function Transaction({ ApiConfig, id }: any) {
 
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps(ctx: any) {
-    const { req, params } = ctx;
+    try {
+      const { req, params } = ctx;
 
-    const user = req.session.user;
-    const token = req.session.token;
+      const user = req.session.user;
+      const token = req.session.token;
 
-    // if (!user) {
-    //   return {
-    //     redirect: {
-    //       destination: "/",
-    //       permanent: false,
-    //     },
-    //   };
-    // }
-    const ApiConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+      const ApiConfig = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
-    return {
-      props: {
-        id: params?.id,
-        ApiConfig: ApiConfig,
-      },
-    };
+      await axios.get(`${API_URL}/transactions/owns/${params?.id}`, ApiConfig);
+
+      return {
+        props: {
+          id: params?.id,
+          ApiConfig: ApiConfig,
+        },
+      };
+    } catch (e) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
   }
 );

@@ -28,9 +28,9 @@ const useAccounts = (ApiConfig: any, id?: number) => {
     try {
       const { data } = await axios.get(`/backend/accounts/${id}`);
 
-      setAccount(data);
+      setAccount(data?.data);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
   }, [id]);
 
@@ -38,7 +38,7 @@ const useAccounts = (ApiConfig: any, id?: number) => {
     try {
       setAccounts(accountsData);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
   }, [id]);
 
@@ -50,9 +50,9 @@ const useAccounts = (ApiConfig: any, id?: number) => {
         ApiConfig
       );
 
-      toast.success(data?.msg);
+      toast.success(data?.message);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
   }, [ApiConfig]);
 

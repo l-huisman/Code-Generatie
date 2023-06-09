@@ -12,30 +12,29 @@ export interface UserContextState {
 }
 
 interface UserProviderProps {
-  ApiConfig: any;
   children: JSX.Element;
 }
 
 export const UserContext = createContext<UserContextState>(null!);
 
 export function UserProvider(props: UserProviderProps): JSX.Element {
-  const { children, ApiConfig } = props;
+  const { children } = props;
   const [userContext, setUser] = useState<UserContextType>(undefined);
   const router = useRouter();
 
   const getCurrentUser = async () => {
     try {
-      // const userInfo = await axios.get(`/backend/users/me`, ApiConfig);
-      // setUser(userInfo.data ? userInfo.data : null);
-      //console.log(userInfo.data);
-      setUser({
-        id: 1,
-        username: "test",
-        email: "",
-        firstName: "Joost",
-        lastName: "Test",
-        userType: "EMPLOYEE",
-      });
+      const userInfo = await axios.get(`/api/me`);
+      setUser(userInfo.data ? userInfo.data : null);
+      console.log(userInfo.data);
+      // setUser({
+      //   id: 1,
+      //   username: "test",
+      //   email: "",
+      //   firstName: "Joost",
+      //   lastName: "Test",
+      //   userType: "EMPLOYEE",
+      // });
     } catch (e) {
       setUser(null);
     }

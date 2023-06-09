@@ -40,9 +40,9 @@ const useTransaction = (
         ApiConfig
       );
 
-      setTransaction(data);
+      setTransaction(data?.data);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
     setLoading(false);
   }, [id, ApiConfig, filters]);
@@ -59,9 +59,9 @@ const useTransaction = (
         ApiConfig
       );
 
-      setTransactions(data);
+      setTransactions(data?.data);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
     setLoading(false);
   }, [ApiConfig, filters]);
@@ -71,9 +71,9 @@ const useTransaction = (
     try {
       const { data } = await axios.get(`/backend/transactions/user`, ApiConfig);
 
-      setTransactions(data);
+      setTransactions(data?.data);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
     setLoading(false);
   }, [ApiConfig]);
@@ -90,9 +90,9 @@ const useTransaction = (
         ApiConfig
       );
 
-      setTransactions(data);
+      setTransactions(data?.data);
     } catch (e: any) {
-      toast.error(e?.response?.data?.msg);
+      toast.error(e?.response?.data?.message);
     }
     setLoading(false);
   }, [accountId, filters, ApiConfig]);
@@ -103,7 +103,9 @@ const useTransaction = (
         const { data } = await axios.post(
           `/backend/transactions`,
           {
-            fromAccountIban: state?.fromAccount?.meta?.iban,
+            fromAccountIban: state?.fromAccount?.meta?.iban
+              ? state?.fromAccount?.meta?.iban
+              : state?.fromAccountIban,
             toAccountIban: state?.toAccount?.meta?.iban
               ? state?.toAccount?.meta?.iban
               : state?.toAccountIban,
@@ -115,9 +117,11 @@ const useTransaction = (
           ApiConfig
         );
 
-        toast.success(data?.msg);
+        setState({});
+        setOpenAddModal(false);
+        toast.success(data?.message);
       } catch (e: any) {
-        toast.error(e?.response?.data?.msg);
+        toast.error(e?.response?.data?.message);
       }
     },
     [ApiConfig, state]
