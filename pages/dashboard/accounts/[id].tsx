@@ -17,7 +17,7 @@ import { useEffect } from "react";
 import DataTable from "react-data-table-component";
 
 export default function Accounts({ ApiConfig, id }: any) {
-  const { accounts } = useAccounts(ApiConfig);
+  const { accounts } = useAccounts("all", ApiConfig);
   const router = useRouter();
   const {
     transactions,
@@ -26,6 +26,12 @@ export default function Accounts({ ApiConfig, id }: any) {
     state,
     openAddModal,
     modalType,
+    pageSize,
+    pageNumber,
+    totalRows,
+    setPageSize,
+    setPageNumber,
+    setTotalRows,
     setModalType,
     setState,
     addTransaction,
@@ -131,6 +137,17 @@ export default function Accounts({ ApiConfig, id }: any) {
                 highlightOnHover
                 pointerOnHover
                 onRowClicked={(row) => router.push(`/transactions/${row.id}`)}
+                paginationPerPage={pageSize}
+                paginationServer
+                paginationTotalRows={totalRows}
+                onChangeRowsPerPage={(currentRowsPerPage, currentPage) => {
+                  setPageSize(currentRowsPerPage);
+                  setPageNumber(currentPage);
+                }}
+                onChangePage={(currentPage) => {
+                  setPageNumber(currentPage);
+                  getTransactionsByAccount();
+                }}
               />
             </div>
           </div>

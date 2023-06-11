@@ -2,7 +2,7 @@
 const withImages = require("next-images");
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     disableStaticImages: true,
     domains: ["localhost"],

@@ -15,8 +15,19 @@ import DataTable from "react-data-table-component";
 
 export default function Transactions({ ApiConfig }: any) {
   const router = useRouter();
-  const { transactions, filters, loading, setFilters, getTransactions } =
-    useTransaction("all", ApiConfig);
+  const {
+    transactions,
+    filters,
+    loading,
+    pageSize,
+    pageSizes,
+    totalRows,
+    pageNumber,
+    setPageNumber,
+    setPageSize,
+    setFilters,
+    getTransactions,
+  } = useTransaction("all", ApiConfig);
 
   return (
     <>
@@ -80,6 +91,22 @@ export default function Transactions({ ApiConfig }: any) {
                 onRowClicked={(row) =>
                   router.push(`/dashboard/transactions/${row.id}`)
                 }
+                paginationPerPage={pageSize}
+                paginationServer
+                paginationTotalRows={totalRows}
+                onChangeRowsPerPage={async (
+                  currentRowsPerPage,
+                  currentPage
+                ) => {
+                  getTransactions(currentPage, currentRowsPerPage);
+                  setPageSize(currentRowsPerPage);
+                  setPageNumber(currentPage);
+                }}
+                onChangePage={async (currentPage) => {
+                  setPageNumber(currentPage);
+                  getTransactions(currentPage);
+                }}
+                paginationRowsPerPageOptions={pageSizes}
               />
             </div>
           </div>
@@ -92,7 +119,6 @@ export default function Transactions({ ApiConfig }: any) {
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps(ctx: any) {
     const { req, params } = ctx;
-
     const user = req.session.user;
     const token = req.session.token;
 
