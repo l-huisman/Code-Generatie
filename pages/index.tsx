@@ -20,7 +20,7 @@ export default function Home({ ApiConfig }: any) {
       case "DEPOSIT":
         return <div className="text-green-600">{amount}</div>;
       case "WITHDRAW":
-        return <div className="text-red-600">{amount}</div>;
+        return <div className="text-red-600">-{amount}</div>;
       case "TRANSFER":
         return <div className="text-gray-600">{amount}</div>;
     }
@@ -103,14 +103,6 @@ export const getServerSideProps = withSessionSsr(
     const user = req.session.user;
     const token = req.session.token;
 
-    // if (!user) {
-    //   return {
-    //     redirect: {
-    //       destination: "/",
-    //       permanent: false,
-    //     },
-    //   };
-    // }
     const ApiConfig = {
       headers: {
         Authorization: `Bearer ${token}`,

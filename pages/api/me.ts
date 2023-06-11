@@ -8,6 +8,9 @@ async function meRoute(req: any, res: any) {
   if (req.method === "GET") {
     try {
       const ApiConfig = {
+        validateStatus: function (status: number) {
+          return status == 200 || status == 302;
+        },
         headers: {
           Authorization: `Bearer ${req?.session?.token}`,
         },
@@ -15,7 +18,7 @@ async function meRoute(req: any, res: any) {
 
       const user = await axios.get(`${API_URL}/users/me`, ApiConfig);
 
-      res.status(200).send(user?.data);
+      res.status(200).send(user?.data?.data);
     } catch (e: any) {
       res.status(500).send(e?.response?.data?.message);
     }

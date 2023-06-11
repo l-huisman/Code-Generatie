@@ -24,10 +24,13 @@ const useTransaction = (
     endDate: dayjs(new Date()).format("YYYY-MM-DD"),
     search: "",
     fromAccountIban: null,
+    amountRelation: "",
+    amount: null,
   });
+  const pageSizes = [5, 10, 20, 30];
   const [pageNumber, setPageNumber] = useState(1);
   const [totalRows, setTotalRows] = useState(0);
-  const [perPage, setPerPage] = useState(0);
+  const [pageSize, setPageSize] = useState(pageSizes?.[0]);
   const [loading, setLoading] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [modalType, setModalType] = useState("Deposit");
@@ -47,24 +50,33 @@ const useTransaction = (
     setLoading(false);
   }, [id, ApiConfig, filters]);
 
-  const getTransactions = useCallback(async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get(
-        `/backend/transactions?start_date=${dayjs(filters?.startDate).format(
-          "YYYY-MM-DD"
-        )}&end_date=${dayjs(filters?.endDate).format("YYYY-MM-DD")}&search=${
-          filters?.search
-        }`,
-        ApiConfig
-      );
+  const getTransactions = useCallback(
+    async (page?: number, size?: number) => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get(
+          `/backend/transactions?start_date=${dayjs(filters?.startDate).format(
+            "YYYY-MM-DD"
+          )}&end_date=${dayjs(filters?.endDate).format("YYYY-MM-DD")}&iban=${
+            filters?.search
+          }&amount_relation=${filters?.amountRelation}&amount=${
+            filters?.amount
+          }&page_number=${page != null ? page - 1 : pageNumber - 1}&page_size=${
+            size || pageSize
+          }`,
+          ApiConfig
+        );
 
-      setTransactions(data?.data);
-    } catch (e: any) {
-      toast.error(e?.response?.data?.message);
-    }
-    setLoading(false);
-  }, [ApiConfig, filters]);
+        setTransactions(data?.data);
+
+        setTotalRows(Number(data?.message));
+      } catch (e: any) {
+        toast.error(e?.response?.data?.message);
+      }
+      setLoading(false);
+    },
+    [ApiConfig, filters, pageNumber, pageSize]
+  );
 
   const getTransactionsByUser = useCallback(async () => {
     setLoading(true);
@@ -86,16 +98,17 @@ const useTransaction = (
           filters?.startDate
         ).format("YYYY-MM-DD")}&end_date=${dayjs(filters?.endDate).format(
           "YYYY-MM-DD"
-        )}&search=${filters?.search}`,
+        )}&search=${filters?.search}&page_number=${0}&page_size=${pageSize}`,
         ApiConfig
       );
 
       setTransactions(data?.data);
+      setTotalRows(Number(data?.message));
     } catch (e: any) {
       toast.error(e?.response?.data?.message);
     }
     setLoading(false);
-  }, [accountId, filters, ApiConfig]);
+  }, [accountId, filters, ApiConfig, pageSize]);
 
   const addTransaction = useCallback(
     async (type: string) => {
@@ -133,6 +146,7 @@ const useTransaction = (
         getTransaction();
         break;
       case "all":
+        console.log("kaas2");
         getTransactions();
         break;
       case "user":
@@ -142,7 +156,8 @@ const useTransaction = (
         getTransactionsByAccount();
         break;
     }
-  }, []);
+    return () => {};
+  }, [type]);
 
   // useEffect(() => {
   //   getTransactions();
@@ -155,13 +170,16 @@ const useTransaction = (
     filters,
     pageNumber,
     totalRows,
-    perPage,
+    pageSize,
     loading,
     openAddModal,
     modalType,
+    pageSizes,
+    setPageSize,
+    setPageNumber,
+    setTotalRows,
     setModalType,
     setOpenAddModal,
-    setPageNumber,
     setState,
     setFilters,
     addTransaction,

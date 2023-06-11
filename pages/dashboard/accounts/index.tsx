@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import DataTable from "react-data-table-component";
 
 export default function Accounts({ ApiConfig }: any) {
-  const { accounts } = useAccounts(ApiConfig);
+  const { accounts } = useAccounts("all", ApiConfig);
   const router = useRouter();
 
   return (
