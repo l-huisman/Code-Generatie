@@ -10,7 +10,7 @@ export interface IInput {
   value?: string;
   selectValue?: object;
   maxLength?: number;
-  options?: { id: number; name: string; meta: any }[];
+  options?: { id: number; name: string; meta?: any }[];
   onChange?: (e: any) => void;
   [x: string | number | symbol]: unknown;
 }

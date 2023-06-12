@@ -10,8 +10,15 @@ import Input from "@/components/input";
 import useTransaction from "hooks/useTransaction";
 import { withSessionSsr } from "@/lib/withSession";
 import Button from "@/components/button";
+import useAccounts from "hooks/useAccounts";
 
 export default function Deposit({ ApiConfig }: any) {
+  const { accounts, accountSelectList, loading } = useAccounts(
+    "user",
+    ApiConfig,
+    undefined,
+    3
+  );
   const { state, addTransaction, setState } = useTransaction(
     "create",
     ApiConfig
@@ -27,13 +34,7 @@ export default function Deposit({ ApiConfig }: any) {
               <form className="flex flex-col gap-y-4">
                 <Input
                   type="select"
-                  options={[
-                    {
-                      id: 1,
-                      name: "Account 1",
-                      meta: { balance: 200, iban: "NL12-MRBA-7175-5284-04" },
-                    },
-                  ]}
+                  options={accountSelectList}
                   name="account"
                   title="Account"
                   selectValue={state?.toAccount}

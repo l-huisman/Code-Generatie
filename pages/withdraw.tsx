@@ -10,12 +10,22 @@ import Input from "@/components/input";
 import useTransaction from "hooks/useTransaction";
 import { withSessionSsr } from "@/lib/withSession";
 import Button from "@/components/button";
+import useAccounts from "hooks/useAccounts";
 
 export default function Withdraw({ ApiConfig }: any) {
   const { state, addTransaction, setState } = useTransaction(
     "create",
     ApiConfig
   );
+
+  const { account, accountSelectList, loading } = useAccounts(
+    "user",
+    ApiConfig,
+    undefined,
+    3,
+    state?.fromAccount?.meta?.iban
+  );
+
   return (
     <>
       <Layout>
@@ -27,13 +37,7 @@ export default function Withdraw({ ApiConfig }: any) {
               <form className="flex flex-col gap-y-4">
                 <Input
                   type="select"
-                  options={[
-                    {
-                      id: 1,
-                      name: "Account 1",
-                      meta: { balance: 200, iban: "NL12-MRBA-7175-5284-04" },
-                    },
-                  ]}
+                  options={accountSelectList}
                   name="account"
                   title="Account"
                   selectValue={state?.fromAccount}
@@ -89,6 +93,10 @@ export default function Withdraw({ ApiConfig }: any) {
                     <p className="font-medium text-base">Balance</p>
                     <p className="text-sm">
                       €{state?.fromAccount?.meta?.balance}
+                    </p>
+                    <p className="font-medium text-base">Daily limit left</p>
+                    <p className="text-sm">
+                      €{account?.accountLimitsLeft?.dailyLimitLeft}
                     </p>
                   </>
                 )}

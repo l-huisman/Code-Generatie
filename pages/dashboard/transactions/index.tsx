@@ -1,6 +1,7 @@
 import { sidebarItems } from "@/assets/data";
 import Button from "@/components/button";
 import Input from "@/components/input";
+import Select from "@/components/select";
 import Spinner from "@/components/spinner";
 import DashboardLayout from "@/layout/dashboardLayout";
 import { withSessionSsr } from "@/lib/withSession";
@@ -23,6 +24,7 @@ export default function Transactions({ ApiConfig }: any) {
     pageSizes,
     totalRows,
     pageNumber,
+    amountRelationTypes,
     setPageNumber,
     setPageSize,
     setFilters,
@@ -38,13 +40,36 @@ export default function Transactions({ ApiConfig }: any) {
               <div className="mb-8 flex items-end justify-start gap-x-4">
                 <Input
                   type="text"
-                  placeholder="Search..."
-                  title="Search"
-                  name="Search"
+                  placeholder="Iban..."
+                  title="Iban"
+                  name="Iban"
                   containerClassName="w-56"
-                  value={filters.search}
+                  value={filters?.iban}
                   onChange={(e) =>
-                    setFilters({ ...filters, search: e.target.value })
+                    setFilters({ ...filters, iban: e.target.value })
+                  }
+                />
+                <Input
+                  type="select"
+                  placeholder="Amount relation..."
+                  title="Amount relation"
+                  name="Amount relation"
+                  containerClassName="w-56"
+                  options={amountRelationTypes}
+                  selectValue={filters?.amountRelation}
+                  onChange={(e) =>
+                    setFilters({ ...filters, amountRelation: e })
+                  }
+                />
+                <Input
+                  type="number"
+                  placeholder="Amount..."
+                  title="Amount"
+                  name="Amount"
+                  containerClassName="w-56"
+                  value={filters?.amount}
+                  onChange={(e) =>
+                    setFilters({ ...filters, amount: e.target.value })
                   }
                 />
                 <Input

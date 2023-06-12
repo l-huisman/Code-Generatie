@@ -34,18 +34,16 @@ export default function Transactions({ ApiConfig, id }: any) {
                     <p className="text-sm">€{transaction?.amount}</p>
                   </li>
 
-                  {transaction?.to_account_iban && (
+                  {transaction?.toAccountIban && (
                     <li>
                       <p className="text-base font-medium">To Account Iban</p>
-                      <p className="text-sm">{transaction?.to_account_iban}</p>
+                      <p className="text-sm">{transaction?.toAccountIban}</p>
                     </li>
                   )}
-                  {transaction?.from_account_iban && (
+                  {transaction?.fromAccountIban && (
                     <li>
                       <p className="text-base font-medium">From Account Iban</p>
-                      <p className="text-sm">
-                        {transaction?.from_account_iban}
-                      </p>
+                      <p className="text-sm">{transaction?.fromAccountIban}</p>
                     </li>
                   )}
                   <li>
@@ -81,14 +79,6 @@ export const getServerSideProps = withSessionSsr(
     const user = req.session.user;
     const token = req.session.token;
 
-    // if (!user) {
-    //   return {
-    //     redirect: {
-    //       destination: "/",
-    //       permanent: false,
-    //     },
-    //   };
-    // }
     const ApiConfig = {
       headers: {
         Authorization: `Bearer ${token}`,
