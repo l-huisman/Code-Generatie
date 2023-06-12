@@ -30,7 +30,7 @@ export default function Accounts({ ApiConfig }: any) {
                       className="cursor-pointer border border-primary p-4 flex justify-between hover:bg-primary hover:text-white"
                     >
                       <h5 className="font-medium font-poppins">
-                        {account?.accountName}
+                        {account?.name}
                       </h5>
                       <p className="font-poppins">
                         Current balance: €{account?.balance}

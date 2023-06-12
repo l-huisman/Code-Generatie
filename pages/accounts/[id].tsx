@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Button from "@/components/button";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Spinner from "@/components/spinner";
+import useAccounts from "hooks/useAccounts";
 
 export default function Account({ ApiConfig, id }: any) {
   const router = useRouter();
@@ -15,6 +16,12 @@ export default function Account({ ApiConfig, id }: any) {
     transactions,
     filters,
     loading,
+    amountRelationTypes,
+    pageSize,
+    pageSizes,
+    totalRows,
+    setPageSize,
+    setPageNumber,
     setFilters,
     getTransactionsByAccount,
   } = useTransaction("account", ApiConfig, undefined, id);
@@ -30,13 +37,36 @@ export default function Account({ ApiConfig, id }: any) {
               <div className="mb-8 flex items-end justify-start gap-x-4">
                 <Input
                   type="text"
-                  placeholder="Search..."
-                  title="Search"
-                  name="Search"
+                  placeholder="Iban..."
+                  title="Iban"
+                  name="Iban"
                   containerClassName="w-56"
-                  value={filters.search}
+                  value={filters?.search_iban}
                   onChange={(e) =>
-                    setFilters({ ...filters, search: e.target.value })
+                    setFilters({ ...filters, search_iban: e.target.value })
+                  }
+                />
+                <Input
+                  type="select"
+                  placeholder="Amount relation..."
+                  title="Amount relation"
+                  name="Amount relation"
+                  containerClassName="w-56"
+                  options={amountRelationTypes}
+                  selectValue={filters?.amountRelation}
+                  onChange={(e) =>
+                    setFilters({ ...filters, amountRelation: e })
+                  }
+                />
+                <Input
+                  type="number"
+                  placeholder="Amount..."
+                  title="Amount"
+                  name="Amount"
+                  containerClassName="w-56"
+                  value={filters?.amount}
+                  onChange={(e) =>
+                    setFilters({ ...filters, amount: e.target.value })
                   }
                 />
                 <Input
@@ -81,6 +111,22 @@ export default function Account({ ApiConfig, id }: any) {
                 highlightOnHover
                 pointerOnHover
                 onRowClicked={(row) => router.push(`/transactions/${row.id}`)}
+                paginationPerPage={pageSize}
+                paginationServer
+                paginationTotalRows={totalRows}
+                onChangeRowsPerPage={async (
+                  currentRowsPerPage,
+                  currentPage
+                ) => {
+                  getTransactionsByAccount(currentPage, currentRowsPerPage);
+                  setPageSize(currentRowsPerPage);
+                  setPageNumber(currentPage);
+                }}
+                onChangePage={async (currentPage) => {
+                  setPageNumber(currentPage);
+                  getTransactionsByAccount(currentPage);
+                }}
+                paginationRowsPerPageOptions={pageSizes}
               />
             </div>
           </div>

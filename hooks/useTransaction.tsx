@@ -22,10 +22,11 @@ const useTransaction = (
   const [filters, setFilters] = useState<any>({
     startDate: `${new Date().getFullYear()}-01-01`,
     endDate: dayjs(new Date()).format("YYYY-MM-DD"),
-    search: "",
+    iban: "",
+    search_iban: "",
     fromAccountIban: null,
     amountRelation: "",
-    amount: null,
+    amount: "",
   });
   const pageSizes = [5, 10, 20, 30];
   const [pageNumber, setPageNumber] = useState(1);
@@ -34,6 +35,24 @@ const useTransaction = (
   const [loading, setLoading] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [modalType, setModalType] = useState("Deposit");
+  const amountRelationTypes = [
+    {
+      id: 1,
+      name: "<",
+    },
+    {
+      id: 2,
+      name: ">",
+    },
+    {
+      id: 3,
+      name: "=",
+    },
+    {
+      id: 4,
+      name: "",
+    },
+  ];
 
   const getTransaction = useCallback(async () => {
     setLoading(true);
@@ -58,8 +77,8 @@ const useTransaction = (
           `/backend/transactions?start_date=${dayjs(filters?.startDate).format(
             "YYYY-MM-DD"
           )}&end_date=${dayjs(filters?.endDate).format("YYYY-MM-DD")}&iban=${
-            filters?.search
-          }&amount_relation=${filters?.amountRelation}&amount=${
+            filters?.iban
+          }&amount_relation=${filters?.amountRelation?.name || ""}&amount=${
             filters?.amount
           }&page_number=${page != null ? page - 1 : pageNumber - 1}&page_size=${
             size || pageSize
@@ -90,25 +109,32 @@ const useTransaction = (
     setLoading(false);
   }, [ApiConfig]);
 
-  const getTransactionsByAccount = useCallback(async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get(
-        `/backend/transactions/accounts/${accountId}?start_date=${dayjs(
-          filters?.startDate
-        ).format("YYYY-MM-DD")}&end_date=${dayjs(filters?.endDate).format(
-          "YYYY-MM-DD"
-        )}&search=${filters?.search}&page_number=${0}&page_size=${pageSize}`,
-        ApiConfig
-      );
+  const getTransactionsByAccount = useCallback(
+    async (page?: number, size?: number) => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get(
+          `/backend/transactions/accounts/${accountId}?start_date=${dayjs(
+            filters?.startDate
+          ).format("YYYY-MM-DD")}&end_date=${dayjs(filters?.endDate).format(
+            "YYYY-MM-DD"
+          )}&search_iban=${filters?.search_iban}&amount_relation=${
+            filters?.amountRelation?.name || ""
+          }&amount=${filters?.amount}&page_number=${
+            page != null ? page - 1 : pageNumber - 1
+          }&page_size=${size || pageSize}`,
+          ApiConfig
+        );
 
-      setTransactions(data?.data);
-      setTotalRows(Number(data?.message));
-    } catch (e: any) {
-      toast.error(e?.response?.data?.message);
-    }
-    setLoading(false);
-  }, [accountId, filters, ApiConfig, pageSize]);
+        setTransactions(data?.data);
+        setTotalRows(Number(data?.message));
+      } catch (e: any) {
+        toast.error(e?.response?.data?.message);
+      }
+      setLoading(false);
+    },
+    [accountId, filters, ApiConfig, pageSize]
+  );
 
   const addTransaction = useCallback(
     async (type: string) => {
@@ -130,7 +156,13 @@ const useTransaction = (
           ApiConfig
         );
 
-        setState({});
+        setState({
+          label: "",
+          description: "",
+          amount: "",
+          toAccountIban: "",
+          fromAccountIban: "",
+        });
         setOpenAddModal(false);
         toast.success(data?.message);
       } catch (e: any) {
@@ -175,6 +207,7 @@ const useTransaction = (
     openAddModal,
     modalType,
     pageSizes,
+    amountRelationTypes,
     setPageSize,
     setPageNumber,
     setTotalRows,

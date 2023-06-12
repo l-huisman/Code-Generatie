@@ -11,6 +11,17 @@ export const transactionColumns = [
     name: "Type",
     selector: (row: any) => row.transactionType,
     sortable: true,
+    maxWidth: "100px",
+  },
+  {
+    name: "From iban",
+    selector: (row: any) => row.fromAccountIban,
+    sortable: true,
+  },
+  {
+    name: "To iban",
+    selector: (row: any) => row.toAccountIban,
+    sortable: true,
   },
   {
     name: "Amount",

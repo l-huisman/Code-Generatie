@@ -14,7 +14,8 @@ const useAccounts = (
   type: string,
   ApiConfig: any,
   id?: number,
-  userId?: number
+  userId?: number,
+  fromAccountIban?: string
 ) => {
   const [accounts, setAccounts] = useState<any>([]);
   const [account, setAccount] = useState<any>({});
@@ -29,16 +30,20 @@ const useAccounts = (
   const [totalRows, setTotalRows] = useState(0);
   const [perPage, setPerPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [accountSelectList, setAccountSelectList] = useState<any>([]);
 
   const getAccount = useCallback(async () => {
     try {
-      const { data } = await axios.get(`/backend/accounts/${id}`, ApiConfig);
+      const { data } = await axios.get(
+        `/backend/accounts/${id || fromAccountIban}`,
+        ApiConfig
+      );
 
       setAccount(data?.data);
     } catch (e: any) {
       toast.error(e?.response?.data?.message);
     }
-  }, [id, ApiConfig]);
+  }, [id, fromAccountIban, ApiConfig]);
 
   const getAccounts = useCallback(async () => {
     try {
@@ -57,6 +62,13 @@ const useAccounts = (
       );
 
       setAccounts(data?.data);
+      setAccountSelectList(
+        data?.data?.map((account: any) => ({
+          id: account?.id,
+          name: account?.name,
+          meta: account,
+        }))
+      );
     } catch (e: any) {
       toast.error(e?.response?.data?.message);
     }
@@ -74,9 +86,15 @@ const useAccounts = (
     }
   }, []);
 
+  // useEffect(() => {
+  //   getAccounts();
+  // }, [pageNumber]);
+
   useEffect(() => {
-    getAccounts();
-  }, [pageNumber]);
+    if (fromAccountIban) {
+      getAccount();
+    }
+  }, [fromAccountIban]);
 
   return {
     account,
@@ -87,6 +105,7 @@ const useAccounts = (
     totalRows,
     perPage,
     loading,
+    accountSelectList,
     setPageNumber,
     setState,
     setFilters,
